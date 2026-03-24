@@ -1,0 +1,20 @@
+{
+  "name": "deliverable-gap-reviewer",
+  "description": "지시서(요청서)와 작업물을 비교하여 주요 누락/미흡 항목을 검출하는 멀티에이전트 리뷰어. Compares instruction documents against deliverables to detect missing or insufficient items using multi-agent review.",
+  "version": "1.0.0",
+  "author": {
+    "name": "OhMyHotel"
+  },
+  "license": "MIT",
+  "keywords": [
+    "document-review",
+    "compliance",
+    "gap-analysis",
+    "deliverable",
+    "instruction",
+    "korean",
+    "multi-agent",
+    "report"
+  ],
+  "category": "productivity"
+}
