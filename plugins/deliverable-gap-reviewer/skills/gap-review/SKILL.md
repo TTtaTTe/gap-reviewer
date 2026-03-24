@@ -2,7 +2,7 @@
 name: gap-review
 description: "지시서(요청서)와 작업물을 비교하여 주요 누락/미흡 항목을 검출합니다. 두 개의 파일(지시서 + 작업물)을 받아 멀티에이전트 분석 후 MD/DOCX 보고서를 생성합니다. Use when comparing an instruction document against a deliverable to find gaps."
 argument-hint: "[지시서 파일경로] [작업물 파일경로]"
-disable-model-invocation: true
+user-invocable: true
 allowed-tools: Read, Write, Bash, Agent, Glob, Grep, AskUserQuestion
 ---
 
