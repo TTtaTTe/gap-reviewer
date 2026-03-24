@@ -226,36 +226,92 @@ Agent 도구로 서브에이전트를 생성한다.
 
 ## 출력 생성
 
-### 1. 수정본 파일 생성
+**중요: 아래 4개 파일만 생성한다. 이 외의 파일을 절대 추가로 만들지 않는다.**
 
-Write 도구로 수정본을 생성한다.
-파일명: `수정본_YYYYMMDD_HHMMSS.{확장자}`
+모든 파일의 타임스탬프는 동일하게 맞춘다.
 저장 경로: 원본 작업물과 같은 폴더 (불가 시 Downloads)
 
-- MD 출력: Write 도구로 직접 생성
-- DOCX 출력: 수정본 내용을 Bash에서 Python 스크립트로 생성
+### 생성할 파일 목록 (정확히 4개)
 
+| # | 파일명 | 내용 | 생성 방법 |
+|---|--------|------|----------|
+| 1 | `수정본_YYYYMMDD_HHMMSS.md` | 수정된 작업물 전문 | Write 도구 |
+| 2 | `수정본_YYYYMMDD_HHMMSS.docx` | 위 MD와 동일 내용의 Word 문서 | Python 스크립트 |
+| 3 | `수정이력_YYYYMMDD_HHMMSS.md` | 수정 이력 보고서 | Write 도구 |
+| 4 | `수정이력_YYYYMMDD_HHMMSS.docx` | 위 MD와 동일 내용의 Word 문서 | Python 스크립트 |
+
+### 1단계: 수정본 MD 생성
+
+Write 도구로 Step 4 수정 반영 에이전트의 출력을 저장한다.
+파일명: `수정본_YYYYMMDD_HHMMSS.md`
+
+### 2단계: 수정본 DOCX 생성
+
+**반드시 실행한다.** MD만 생성하고 DOCX를 건너뛰지 않는다.
+
+먼저 Step 4의 수정본 텍스트를 임시 .txt 파일로 저장한 뒤:
 ```bash
-python "${CLAUDE_SKILL_DIR}/scripts/generate_fix_docx.py" "{modification_json_path}" "{content_text_path}" "{output_docx_path}"
+python "${CLAUDE_SKILL_DIR}/scripts/generate_fix_docx.py" "none" "{수정본_txt_임시파일_경로}" "{수정본_YYYYMMDD_HHMMSS.docx 경로}"
 ```
 
-### 2. 수정 이력 보고서 (MD + DOCX)
+DOCX 생성 완료 후 임시 .txt 파일은 삭제한다.
 
-Write 도구로 수정 이력 MD를 생성한다.
+### 3단계: 수정이력 MD 생성
+
+Write 도구로 수정 이력 보고서를 생성한다.
 파일명: `수정이력_YYYYMMDD_HHMMSS.md`
 
-MD 보고서 구조:
-1. 개요 (원본 파일, 수정본 파일, 수정 항목 수/잔여 항목 수)
-2. 수정 항목 상세 (항목별 before_score, action, description, 출처)
-3. 미수정 잔여 항목 (항목별 사유)
-4. 수정 전후 커버리지 비교
+MD 보고서 구조 (이 형식을 정확히 따른다):
 
-DOCX도 동일 내용으로 생성:
-```bash
-python "${CLAUDE_SKILL_DIR}/scripts/generate_fix_docx.py" "{modification_json_path}" "{content_text_path}" "{output_docx_path}"
+```markdown
+# 수정 이력 보고서
+
+생성일시: YYYY-MM-DD HH:MM
+
+## 1. 개요
+
+| 항목 | 내용 |
+|------|------|
+| 검토보고서 | {JSON 파일명} |
+| 원본 작업물 | {파일명} |
+| 수정본 파일 | {파일명} |
+| 전체 보완 필요 | {total_gaps}개 |
+| 수정 완료 | {fixed_count}개 |
+| 잔여 항목 | {remaining_count}개 |
+
+## 2. 수정 항목 상세
+
+### #{item_id} {requirement} (기존 {before_score}점)
+- 수정 내용: {action} — {description}
+- 출처: {cover_source}
+
+(각 수정 항목 반복)
+
+## 3. 미수정 잔여 항목
+
+| # | 요구항목 | 점수 | 미수정 사유 |
+|---|---------|------|-----------|
+
+## 4. 커버리지 비교
+
+| 구분 | 수정 전 | 수정 후 |
+|------|--------|--------|
+| 보완 필요 항목 | {total_gaps}개 | {remaining_count}개 |
+| 커버율 | 0% | {fixed_count/total_gaps * 100}% |
 ```
 
-### 3. 완료 알림
+### 4단계: 수정이력 DOCX 생성
+
+**반드시 실행한다.**
+
+Step 5의 수정 이력 JSON을 임시 파일로 저장한 뒤:
+```bash
+python "${CLAUDE_SKILL_DIR}/scripts/generate_fix_docx.py" "{수정이력_json_임시파일_경로}" "none" "{수정이력_YYYYMMDD_HHMMSS.docx 경로}"
+```
+
+DOCX 생성 완료 후 임시 JSON 파일은 삭제한다.
+
+### 5단계: 완료 알림
 
 **반드시 아래 양식만** 출력한다:
 
@@ -265,10 +321,9 @@ python "${CLAUDE_SKILL_DIR}/scripts/generate_fix_docx.py" "{modification_json_pa
 수정 항목: {fixed_count}/{total_gaps}개
 잔여 항목: {remaining_count}개
 
-수정본 저장 위치:
-- {수정본 경로}
-
-수정 이력:
+생성된 파일:
+- {수정본 MD 경로}
+- {수정본 DOCX 경로}
 - {수정이력 MD 경로}
 - {수정이력 DOCX 경로}
 ```
