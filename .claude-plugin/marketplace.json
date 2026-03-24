@@ -1,0 +1,20 @@
+{
+  "name": "gap-reviewer",
+  "owner": {
+    "name": "OhMyHotel"
+  },
+  "metadata": {
+    "description": "지시서(요청서)와 작업물을 비교하여 주요 누락/미흡 항목을 검출하는 멀티에이전트 리뷰어",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "deliverable-gap-reviewer",
+      "source": ".",
+      "description": "지시서와 작업물을 비교하여 누락/미흡 항목을 검출하는 멀티에이전트 리뷰 플러그인",
+      "version": "1.0.0",
+      "category": "productivity",
+      "tags": ["document-review", "compliance", "gap-analysis", "korean"]
+    }
+  ]
+}
