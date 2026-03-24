@@ -30,6 +30,19 @@ allowed-tools: Read, Write, Bash, Agent, Glob, Grep, AskUserQuestion
 
 상세 채점 기준은 [scoring_rubric.md](references/scoring_rubric.md) 참조.
 
+## JSON 출력 스키마 및 저장 규칙
+
+gap-fix 스킬과의 데이터 연결을 위해, Phase 2 완료 후 반드시 JSON 파일을 생성한다.
+상세 스키마는 [output_schema.md](references/output_schema.md) 참조.
+
+### 저장 경로 우선순위
+1. 지시서 파일과 **같은 폴더**
+2. 쓰기 불가 시 → 사용자 **Downloads 폴더**
+3. 그래도 불가 시 → 사용자에게 경로 질문
+
+### 파일명 형식
+`검토보고서_YYYYMMDD_HHMMSS.json` (MD, DOCX와 동일 타임스탬프)
+
 ---
 
 ## 워크플로우 실행
@@ -180,9 +193,12 @@ Agent 도구로 서브에이전트를 생성한다.
 
 ```json
 {
+  "schema_version": "1.0.0",
   "report": {
     "instruction_file": "파일명",
     "deliverable_file": "파일명",
+    "instruction_file_path": "전체 경로",
+    "deliverable_file_path": "전체 경로",
     "phase1_score": 숫자,
     "phase2_overall_score": 숫자,
     "total_items": 숫자,
@@ -197,6 +213,9 @@ Agent 도구로 서브에이전트를 생성한다.
       "id": 1,
       "category": "분류명",
       "requirement": "요구항목",
+      "detail": "상세 내용 (검증 가능한 수준)",
+      "source": "explicit 또는 implicit",
+      "priority": "required 또는 recommended",
       "score_r1": 숫자,
       "score_r2": 숫자,
       "final_score": 숫자,
