@@ -38,7 +38,9 @@
     "deliverable_file": "(string) 작업물 파일명. 예: '제안보고서.docx'",
     "instruction_file_path": "(string) 지시서 전체 경로. 예: 'C:/문서/재지시서.pdf'",
     "deliverable_file_path": "(string) 작업물 전체 경로. 예: 'C:/문서/제안보고서.docx'",
-    "phase1_score": "(number) Phase 1 분석 신뢰도. 0.0~10.0",
+    "phase1_analyst_count": "(integer) 분석가가 추출한 항목 수",
+    "phase1_reviewer_added": "(integer) 리뷰어가 추가한 항목 수",
+    "phase1_reviewer_modified": "(integer) 리뷰어가 수정한 항목 수",
     "phase2_overall_score": "(number) Phase 2 종합 점수. 0.0~10.0",
     "total_items": "(integer) 전체 체크리스트 항목 수",
     "fulfilled_count": "(integer) 충족 항목 수 (10.0점)",
@@ -69,8 +71,11 @@
 
   "phase1_history": [
     {
-      "round": "(string) 단계명. 예: '1차 분석', '리뷰어 피드백', '보완 분석', '최종 확인'",
-      "score": "(number) 해당 단계 점수. 0.0~10.0"
+      "round": "(string) 단계명. 예: '분석가 추출', '리뷰어 보완'",
+      "count": "(integer) 해당 단계 항목 수 (분석가 추출 시)",
+      "added": "(integer|null) 추가 수 (리뷰어 보완 시)",
+      "modified": "(integer|null) 수정 수 (리뷰어 보완 시)",
+      "final_count": "(integer|null) 최종 항목 수 (리뷰어 보완 시)"
     }
   ]
 }
